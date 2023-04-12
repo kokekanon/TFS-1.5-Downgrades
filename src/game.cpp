@@ -5863,3 +5863,40 @@ bool Game::reload(ReloadTypes_t reloadType)
 	}
 	return true;
 }
+void Game::sendAttachedEffect(const Creature* creature, uint16_t effectId)
+{
+	const Player* player = creature->getPlayer();
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+		SpectatorVec spectators;
+		map.getSpectators(spectators, creature->getPosition(), false, true);
+		for (Creature* spectator : spectators) {
+			spectator->getPlayer()->sendAttachedEffect(creature, effectId);
+		}
+	}
+}
+
+void Game::sendDetachEffect(const Creature* creature, uint16_t effectId)
+{
+	const Player* player = creature->getPlayer();
+	
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+		SpectatorVec spectators;
+		map.getSpectators(spectators, creature->getPosition(), false, true);
+		for (Creature* spectator : spectators) {
+			spectator->getPlayer()->sendDetachEffect(creature, effectId);
+		}
+	}
+}
+
+
+void Game::updateCreatureShader(const Creature* creature) { 
+	const Player* player = creature->getPlayer();
+
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+		SpectatorVec spectators;
+		map.getSpectators(spectators, creature->getPosition(), false, true);
+		for (Creature* spectator : spectators) {
+			spectator->getPlayer()->sendShader(creature, creature->getShader());
+		}
+	}
+}

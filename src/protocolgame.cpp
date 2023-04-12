@@ -3080,6 +3080,15 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 	*/
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+	
+		msg.addString(creature->getShader());
+		msg.addByte(static_cast<uint8_t>(creature->getAttachedEffectList().size()));
+		for (const uint16_t id : creature->getAttachedEffectList())
+			msg.add<uint16_t>(id);
+
+
+	}
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
@@ -3313,4 +3322,39 @@ void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 
 	// process additional opcodes via lua script event
 	addGameTask(&Game::parsePlayerExtendedOpcode, player->getID(), opcode, buffer);
+}
+void ProtocolGame::sendAttachedEffect(const Creature* creature, uint16_t effectId) {
+
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+
+		NetworkMessage playermsg;
+		playermsg.reset();
+		playermsg.addByte(0x34);
+		playermsg.add<uint32_t>(creature->getID());
+		playermsg.add<uint16_t>(effectId);
+		writeToOutputBuffer(playermsg);
+	}
+}
+
+void ProtocolGame::sendDetachEffect(const Creature* creature, uint16_t effectId) {
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+		NetworkMessage playermsg;
+		playermsg.reset();
+		playermsg.addByte(0x35);
+		playermsg.add<uint32_t>(creature->getID());
+		playermsg.add<uint16_t>(effectId);
+		writeToOutputBuffer(playermsg);
+	}
+}
+
+
+void ProtocolGame::sendShader(const Creature* creature, const std::string& shaderName) {
+	if (player->getOperatingSystem() >= CLIENTOS_OTCLIENT_LINUX) {
+		NetworkMessage playermsg;
+		playermsg.reset();
+		playermsg.addByte(0x36);
+		playermsg.add<uint32_t>(creature->getID());
+		playermsg.addString(shaderName);
+		writeToOutputBuffer(playermsg);
+	}
 }

@@ -814,6 +814,8 @@ class LuaScriptInterface
 
 		static int luaCreatureGetLight(lua_State* L);
 		static int luaCreatureSetLight(lua_State* L);
+		static int luaCreatureGetShader(lua_State* L);
+		static int luaCreatureSetShader(lua_State* L);
 
 		static int luaCreatureGetSpeed(lua_State* L);
 		static int luaCreatureGetBaseSpeed(lua_State* L);
@@ -861,6 +863,8 @@ class LuaScriptInterface
 
 		static int luaCreatureGetZone(lua_State* L);
 
+		static int luaCreatureAttachEffectById(lua_State* L);
+		static int luaCreatureDetachEffectById(lua_State* L);
 		// Player
 		static int luaPlayerCreate(lua_State* L);
 

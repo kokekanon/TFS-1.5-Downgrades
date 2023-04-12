@@ -282,6 +282,10 @@ class ProtocolGame final : public Protocol
 		//messages
 		void sendModalWindow(const ModalWindow& modalWindow);
 
+		void sendAttachedEffect(const Creature* creature, uint16_t effectId);
+		void sendDetachEffect(const Creature* creature, uint16_t effectId);
+		void sendShader(const Creature* creature, const std::string& shaderName);
+
 		//Help functions
 
 		// translate a tile to client-readable format
