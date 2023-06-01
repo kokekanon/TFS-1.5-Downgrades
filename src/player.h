@@ -725,11 +725,7 @@ class Player final : public Creature, public Cylinder
 				client->sendUpdateTileCreature(creature->getPosition(), creature->getTile()->getClientIndexOfCreature(this, creature), creature);
 			}
 		}
-		void sendRemoveTileCreature(const Creature* creature, const Position& pos, int32_t stackpos) {
-			if (client) {
-				client->sendRemoveTileCreature(creature, pos, stackpos);
-			}
-		}
+
 		void sendUpdateTile(const Tile* tile, const Position& pos) {
 			if (client) {
 				client->sendUpdateTile(tile, pos);
@@ -807,7 +803,7 @@ class Player final : public Creature, public Cylinder
 				if (visible) {
 					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
 				} else {
-					client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
+					client->sendRemoveTileThing(creature->getPosition(), stackpos);
 				}
 			}
 		}
